@@ -41,7 +41,7 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonSpinner,
+    IonSpinner
 } from "@ionic/vue";
 
 const props = defineProps(["forecastData"]);

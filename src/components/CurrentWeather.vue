@@ -26,6 +26,12 @@
             </ion-card-header>
             <ion-card-content>
                 <ion-card-subtitle>
+                    <ion-icon :icon="thermometerOutline"></ion-icon>
+                    Sensación térmica:
+                    {{ convertKelvinToCelsius(weatherData.main.feels_like) }} °C
+                </ion-card-subtitle>
+                <ion-card-subtitle>
+                    <ion-icon :icon="waterOutline"></ion-icon>
                     Humedad: {{ weatherData.main.humidity }}%
                 </ion-card-subtitle>
                 <ion-card-subtitle>
@@ -37,8 +43,8 @@
             </ion-card-content>
         </ion-card>
 
-        <div v-else class="ion-padding">
-            <p class="ion-text-center">Cargando...</p>
+        <div v-else class="loading-container">
+            <ion-spinner name="crescent"></ion-spinner>
         </div>
     </div>
 </template>
@@ -52,7 +58,10 @@ import {
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
+    IonIcon,
+    IonSpinner
 } from "@ionic/vue";
+import { thermometerOutline, waterOutline } from "ionicons/icons";
 
 const props = defineProps(["weatherData"]);
 
@@ -68,8 +77,6 @@ const getWeatherIconUrl = (iconCode: string, size: "1x" | "2x" | "4x") => {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,700&display=swap");
-
 * {
     font-family: "Nunito Sans", sans-serif;
 }
@@ -118,4 +125,17 @@ ion-card img {
 .background {
     background-color: skyblue;
 }
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;  
+}
+
+ion-spinner {
+        width: 80px;
+        height: 80px;
+    }
 </style>
