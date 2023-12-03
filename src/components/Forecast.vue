@@ -2,18 +2,22 @@
     <div>
         <!-- Card principal para la información básica del pronóstico -->
         <ion-card v-if="forecastData && forecastData.city">
-            <ion-card-header>
-                <ion-card-title>{{ forecastData.city.name }} - Pronóstico</ion-card-title>
-            </ion-card-header>
             <ion-card-content>
                 <ion-list>
-                    <ion-item v-for="forecast in forecastData.list" :key="forecast.dt">
+                    <ion-item v-for="(forecast, index) in forecastData.list" :key="forecast.dt">
+                        <template v-if="isNewDay(index)">
+                            <ion-header class="date-header">
+                                <ion-title>{{
+                                    getFormattedDate(forecast.dt, true, false)
+                                }}</ion-title>
+                            </ion-header>
+                        </template>
                         <div class="background">
                             <img v-if="forecast.weather && forecast.weather[0]"
                                 :src="getWeatherIconUrl(forecast.weather[0].icon, '2x')" alt="Icono del Tiempo" />
                         </div>
                         <ion-label>
-                            <h3>{{ getFormattedDate(forecast.dt) }}</h3>
+                            <h3>{{ getFormattedDate(forecast.dt, false, true) }}</h3>
                             <p>{{ forecast.weather[0].description }}</p>
                             <p>
                                 Temperatura: {{ convertKelvinToCelsius(forecast.main.temp) }} °C
@@ -36,8 +40,8 @@ import { ForecastResponse } from "@/interfaces/WeatherInterfaces";
 import {
     IonCard,
     IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
+    IonHeader,
+    IonTitle,
     IonItem,
     IonLabel,
     IonList,
@@ -57,9 +61,45 @@ const convertKelvinToCelsius = (kelvin: number) => {
 };
 
 // Función para obtener la fecha formateada
-const getFormattedDate = (timestamp: number) => {
+const getFormattedDate = (
+    timestamp: number,
+    includeDate: boolean = false,
+    includeTime: boolean = false
+) => {
     const date = new Date(timestamp * 1000);
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+
+    const options: Intl.DateTimeFormatOptions = {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+    };
+
+    let formattedDate = includeDate
+        ? date.toLocaleDateString(undefined, options)
+        : "";
+    formattedDate += includeTime ? ` ${date.toLocaleTimeString()}` : "";
+
+    return formattedDate.trim();
+};
+
+// Función para verificar si es un nuevo día
+const isNewDay = (index: number): boolean => {
+    if (index === 0) {
+        return true; // El primer elemento siempre es un nuevo día
+    }
+
+    const currentDate = getFormattedDate(
+        props.forecastData.list[index].dt,
+        true,
+        false
+    );
+    const previousDate = getFormattedDate(
+        props.forecastData.list[index - 1].dt,
+        true,
+        false
+    );
+
+    return currentDate !== previousDate;
 };
 </script>
 
@@ -72,9 +112,14 @@ ion-card {
     margin: 10px;
     border-radius: 10px;
 
-    ion-card-header {
+    ion-header {
         background-color: #3498db;
         color: #fff;
+
+        ion-title {
+            padding-inline: 0;
+            font-weight: 400;
+        }
     }
 
     ion-list {
@@ -82,10 +127,15 @@ ion-card {
             border-bottom: 1px solid #ccc;
             padding: 10px;
 
+            ion-label {
+                display: block;
+            }
+
             .background {
                 background-color: skyblue;
                 border-radius: 100%;
                 border: 2px solid white;
+                overflow: hidden;
                 margin-right: 20px;
             }
         }
@@ -103,5 +153,9 @@ ion-card {
         width: 80px;
         height: 80px;
     }
+}
+
+ion-header.date-header {
+    width: 80%;
 }
 </style>

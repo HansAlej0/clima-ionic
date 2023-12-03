@@ -1,4 +1,5 @@
-import axios from "axios";import {
+import axios from "axios";
+import {
     WeatherResponse,
     ForecastResponse,
 } from "@/interfaces/WeatherInterfaces";
@@ -26,7 +27,7 @@ export async function getWeatherForecast(
 ): Promise<ForecastResponse> {
     try {
         const response = await axios.get(
-          `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&interval=1h`
+            `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&interval=1h`
         );
         return response.data as ForecastResponse;
     } catch (error) {
@@ -37,7 +38,7 @@ export async function getWeatherForecast(
 
 export async function getWeatherForecastByDays(
     city: string,
-    apiKey: string,
+    apiKey: string
 ): Promise<ForecastResponse> {
     try {
         const response = await axios.get(

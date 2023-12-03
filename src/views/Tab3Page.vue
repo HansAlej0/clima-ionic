@@ -2,9 +2,6 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Logo</ion-title>
-      </ion-toolbar>
-      <ion-toolbar>
         <SearchBar v-model="city" @enter="onEnter" />
       </ion-toolbar>
     </ion-header>

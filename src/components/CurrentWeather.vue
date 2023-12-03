@@ -26,12 +26,10 @@
             </ion-card-header>
             <ion-card-content>
                 <ion-card-subtitle>
-                    <ion-icon :icon="thermometerOutline"></ion-icon>
                     Sensación térmica:
                     {{ convertKelvinToCelsius(weatherData.main.feels_like) }} °C
                 </ion-card-subtitle>
                 <ion-card-subtitle>
-                    <ion-icon :icon="waterOutline"></ion-icon>
                     Humedad: {{ weatherData.main.humidity }}%
                 </ion-card-subtitle>
                 <ion-card-subtitle>
@@ -58,10 +56,8 @@ import {
     IonCardHeader,
     IonCardTitle,
     IonCardSubtitle,
-    IonIcon,
-    IonSpinner
+    IonSpinner,
 } from "@ionic/vue";
-import { thermometerOutline, waterOutline } from "ionicons/icons";
 
 const props = defineProps(["weatherData"]);
 
@@ -88,6 +84,7 @@ ion-card {
     border-radius: 4px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 
@@ -131,11 +128,11 @@ ion-card img {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 50vh;  
+    height: 50vh;
 }
 
 ion-spinner {
-        width: 80px;
-        height: 80px;
-    }
+    width: 80px;
+    height: 80px;
+}
 </style>
